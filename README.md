@@ -1,44 +1,61 @@
-# 🍕 PizzaRP – Pizzeria Reference Project (Console)
+# 📓 STUDYPLANNER
 
-> 🚧 This is a template repository for student project in the course Programming Foundations at FHNW, BSc BIT.  
-> 🚧 Do not keep this section in your final submission.
+Konsolenanwendung für das Modul **Grundlagen Programmierung** im BSc Wirtschaftsinformatik der FHNW.
 
-This project is intended to:
+> **Projektstatus:** Konzept und Umsetzung in Arbeit. Die beschriebenen Funktionen sind Projektziele. Vor der Abgabe wird dieses README an den tatsächlich implementierten Stand angepasst.
 
-- Practice the complete process from **problem analysis to implementation**
-- Apply basic **Python** programming concepts learned in the Programming Foundations module
-- Demonstrate the use of **console interaction, data validation, and file processing**
-- Produce clean, well-structured, and documented code
-- Prepare students for **teamwork and documentation** in later modules
-- Use this repository as a starting point by importing it into your own GitHub account.  
-- Work only within your own copy — do not push to the original template.  
-- Commit regularly to track your progress.
+## Analysis
 
-# 🍕 TEMPLATE for documentation
-> 🚧 Please remove this paragraphs having "🚧". These are comments for preparing the documentations.
-## 📝 Analysis
+### Problem
 
-**Problem**
-> 🚧 Describe the real-world problem your application solves. (Not HOW, but WHAT)
+Studierende haben Lernaufgaben aus mehreren Fächern mit unterschiedlichen Fristen. Sie müssen einschätzen, wie viel Lernzeit bis zu jeder Frist zur Verfügung steht. Ohne gemeinsame Übersicht ist schwer erkennbar, ob die Zeit ausreicht und wann eine Aufgabe sinnvoll bearbeitet werden kann.
 
-💡 Example: In a small local pizzeria, the staff writes orders and calculates totals by hand. This causes mistakes and inconsistent orders or discounts.
+### Scenario
 
-**Scenario**
-> 🚧 Describe when and how a user will use your application
+Eine studierende Person startet den Studyplanner im Terminal. Sie erfasst Fächer, Aufgaben mit Aufwand und Frist sowie die verfügbaren Lernminuten für einzelne Tage. Der Studyplanner erstellt einen Plan für offene Aufgaben. Reicht die Zeit bis zu einer Frist nicht aus, zeigt er die fehlenden Minuten an. Die Eingaben werden in einer Datei gespeichert und beim nächsten Start wieder geladen.
 
-💡 Example: PizzaRP solves the part of the problem where orders and totals are created by letting a user select items from a menu and automatically generating a correct invoice.
+### User Stories und Acceptance Criteria
 
-**User stories:**
-1. As a user, I want to see the pizza menu in the console.
-2. As a user, I want to select pizzas and see the running total.
-3. As a user, I want discounts to be applied automatically.
-4. As a user, I want an invoice to be created and saved as a file.
+#### US01 – Fächer und Aufgaben erfassen
 
-**Use cases:**
-- Show Menu (from `menu.txt`)
-- Create Order (choose pizzas)
-- Show Current Order and Total
-- Print Invoice (to `invoice_xxx.txt`)
+Als studierende Person möchte ich Fächer und Lernaufgaben erfassen, damit ich meine anstehenden Arbeiten überblicken kann.
+
+#### US02 – Lernzeit erfassen
+
+Als studierende Person möchte ich verfügbare Lernzeit für einzelne Tage erfassen, damit mein Plan meine tatsächliche Zeit berücksichtigt.
+
+#### US03 – Lernplan erstellen
+
+Als studierende Person möchte ich offene Aufgaben auf verfügbare Tage verteilen lassen, damit ich weiss, wann ich für welche Aufgabe lerne.
+
+#### US04 – Zeitmangel erkennen
+
+Als studierende Person möchte ich gewarnt werden, wenn die Lernzeit bis zu einer Frist nicht ausreicht, damit ich meinen Plan anpassen kann.
+
+#### US05 – Aufgabe erledigen
+
+Als studierende Person möchte ich Aufgaben als erledigt markieren, damit sie nicht erneut eingeplant werden.
+
+#### US06 – Daten behalten
+
+Als studierende Person möchte ich meine Daten nach einem Neustart wiederfinden, damit ich den Studyplanner wiederholt nutzen kann.
+
+### Use Cases
+
+| ID | Use Case | Ergebnis |
+| --- | --- | --- |
+| UC01 | Fach erfassen | Ein neues Fach steht für Aufgaben zur Auswahl. |
+| UC02 | Aufgabe erfassen | Eine gültige Aufgabe erscheint in der Übersicht. |
+| UC03 | Aufgaben anzeigen | Offene Aufgaben werden nach Fälligkeit angezeigt. |
+| UC04 | Lernzeit erfassen | Verfügbare Minuten sind einem Datum zugeordnet. |
+| UC05 | Lernplan erstellen | Offene Aufgaben erhalten Lernminuten vor ihrer Frist. |
+| UC06 | Engpass anzeigen | Fehlende Minuten pro Aufgabe werden sichtbar. |
+| UC07 | Aufgabe erledigen | Die Aufgabe wird beim nächsten Plan nicht mehr berücksichtigt. |
+| UC08 | Daten speichern und laden | Nach einem Neustart stehen die Eingaben wieder zur Verfügung. |
+
+### Beispiel für die Abnahme
+
+Eine offene Aufgabe benötigt **120 Minuten** bis Mittwoch. Montag sind **60 Minuten**, Dienstag **30 Minuten** und Donnerstag **90 Minuten** frei. Erwartet werden 60 Minuten am Montag, 30 Minuten am Dienstag, keine Minuten am Donnerstag und eine Warnung über **30 fehlende Minuten**.
 
 ---
 
