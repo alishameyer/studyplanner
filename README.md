@@ -1,80 +1,337 @@
 # 📓 STUDYPLANNER
 
-Konsolenanwendung für das Modul **Grundlagen Programmierung** im BSc Wirtschaftsinformatik der FHNW.
+Konsolenanwendung für das Modul **Grundlagen Programmierung**
+im BSc Wirtschaftsinformatik der FHNW.
 
-> **Projektstatus:** Konzept und Umsetzung in Arbeit. Die beschriebenen Funktionen sind Projektziele. Vor der Abgabe wird dieses README an den tatsächlich implementierten Stand angepasst.
+> **Projektstatus:** In Entwicklung. Die beschriebenen Funktionen
+> sind Projektziele.
 
-## Analysis
+
+## 📝 Analysis
 
 ### Problem
 
-Studierende haben Lernaufgaben aus mehreren Fächern mit unterschiedlichen Fristen. Sie müssen einschätzen, wie viel Lernzeit bis zu jeder Frist zur Verfügung steht. Ohne gemeinsame Übersicht ist schwer erkennbar, ob die Zeit ausreicht und wann eine Aufgabe sinnvoll bearbeitet werden kann.
+Studierende haben Lernaufgaben aus mehreren Fächern mit unterschiedlichen
+Fristen. Ohne gemeinsame Übersicht ist schwer erkennbar, welche Aufgaben
+anstehen und ob die verfügbare Lernzeit bis zur jeweiligen Frist ausreicht.
 
 ### Scenario
 
-Eine studierende Person startet den Studyplanner im Terminal. Sie erfasst Fächer, Aufgaben mit Aufwand und Frist sowie die verfügbaren Lernminuten für einzelne Tage. Der Studyplanner erstellt einen Plan für offene Aufgaben. Reicht die Zeit bis zu einer Frist nicht aus, zeigt er die fehlenden Minuten an. Die Eingaben werden in einer Datei gespeichert und beim nächsten Start wieder geladen.
+Eine studierende Person erfasst Fächer, Lernaufgaben und verfügbare
+Lernminuten in der Konsole. Der Studyplanner zeigt Aufgaben und Fortschritt
+an und erstellt einen Lernplan. Reicht die Zeit bis zur Frist nicht aus,
+zeigt er die fehlenden Minuten an. Die Daten bleiben nach einem Neustart
+erhalten.
 
 ### User Stories und Acceptance Criteria
 
-#### US01 – Fächer und Aufgaben erfassen
+<img width="652" height="721" alt="image" src="https://github.com/user-attachments/assets/561894a3-99d1-4e03-a39e-d167816ddc40" />
 
-Als studierende Person möchte ich Fächer und Lernaufgaben erfassen, damit ich meine anstehenden Arbeiten überblicken kann.
+#### Fächer und Aufgaben
 
-#### US02 – Lernzeit erfassen
+**US01 – Fach erfassen**
 
-Als studierende Person möchte ich verfügbare Lernzeit für einzelne Tage erfassen, damit mein Plan meine tatsächliche Zeit berücksichtigt.
+Als studierende Person möchte ich Fächer erfassen,
+damit ich Aufgaben einem Fach zuordnen kann.
 
-#### US03 – Lernplan erstellen
+- Fachnamen dürfen nicht leer sein.
+- Bereits vorhandene Fachnamen werden nicht doppelt angelegt.
+- Ein erfasstes Fach steht bei der Aufgabenerfassung zur Auswahl.
 
-Als studierende Person möchte ich offene Aufgaben auf verfügbare Tage verteilen lassen, damit ich weiss, wann ich für welche Aufgabe lerne.
+**US02 – Aufgabe erfassen**
 
-#### US04 – Zeitmangel erkennen
+Als studierende Person möchte ich Lernaufgaben erfassen,
+damit ich weiss, was ich bis wann erledigen muss.
 
-Als studierende Person möchte ich gewarnt werden, wenn die Lernzeit bis zu einer Frist nicht ausreicht, damit ich meinen Plan anpassen kann.
+- Eine Aufgabe enthält Titel, vorhandenes Fach, gültige Frist,
+  positive ganze Minutenzahl und Priorität von 1 bis 3.
+- Jede Aufgabe erhält eine eindeutige ID und den Status „offen“.
+- Ungültige Eingaben werden verständlich gemeldet und nicht gespeichert.
 
-#### US05 – Aufgabe erledigen
+**US03 – Aufgabe bearbeiten**
 
-Als studierende Person möchte ich Aufgaben als erledigt markieren, damit sie nicht erneut eingeplant werden.
+Als studierende Person möchte ich Aufgaben bearbeiten,
+damit ich Änderungen an Inhalt, Frist oder Aufwand berücksichtigen kann.
 
-#### US06 – Daten behalten
+- Eine Aufgabe kann über ihre ID ausgewählt und bearbeitet werden.
+- Geänderte Angaben werden wie bei der Erfassung geprüft.
+- Die ID und der Status bleiben erhalten; unbekannte IDs verändern nichts.
 
-Als studierende Person möchte ich meine Daten nach einem Neustart wiederfinden, damit ich den Studyplanner wiederholt nutzen kann.
+#### Übersicht und Fortschritt
 
-#### US07
+**US04 – Aufgaben anzeigen**
 
-#### US08
+Als studierende Person möchte ich meine Aufgaben nach Frist anzeigen,
+damit ich erkenne, welche Aufgaben als Nächstes anstehen.
 
-#### US09
+- Offene Aufgaben werden nach aufsteigender Frist angezeigt.
+- Die Übersicht enthält ID, Titel, Fach, Frist, Aufwand und Priorität;
+  erledigte Aufgaben werden getrennt angezeigt.
+- Ohne Aufgaben erscheint eine verständliche Meldung.
 
-#### US10
+**US05 – Aufgabe erledigen**
 
-#### US11
+Als studierende Person möchte ich Aufgaben als erledigt markieren,
+damit abgeschlossene Aufgaben nicht erneut eingeplant werden.
 
-#### US12
+- Eine vorhandene offene Aufgabe kann über ihre ID erledigt werden.
+- Die Änderung wird bestätigt und ist in der Übersicht sichtbar.
+- Bei der nächsten Planberechnung wird die Aufgabe ausgeschlossen.
 
+**US06 – Fortschritt anzeigen**
 
+Als studierende Person möchte ich meinen Fortschritt sehen,
+damit ich erkenne, wie viele Aufgaben abgeschlossen sind.
+
+- Die Anzahl aller, offenen und erledigten Aufgaben wird angezeigt.
+- Der Prozentanteil erledigter Aufgaben wird korrekt berechnet.
+- Ohne Aufgaben werden 0 Aufgaben und 0 % angezeigt.
+
+#### Lernzeiten und Planung
+
+**US07 – Lernzeit erfassen**
+
+Als studierende Person möchte ich verfügbare Lernminuten pro Tag erfassen,
+damit der Plan meine tatsächliche Zeit berücksichtigt.
+
+- Ein gültiges Datum und eine positive ganze Minutenzahl werden akzeptiert.
+- Eine neue Eingabe für denselben Tag ersetzt den bisherigen Wert.
+- Ungültige Angaben werden verständlich gemeldet und nicht übernommen.
+
+**US08 – Lernzeiten anzeigen**
+
+Als studierende Person möchte ich meine Lernzeiten anzeigen,
+damit ich die erfasste Verfügbarkeit überprüfen kann.
+
+- Die Einträge werden chronologisch mit Datum und Minuten angezeigt.
+- Die Summe der angezeigten Minuten wird ausgegeben.
+- Ohne Einträge erscheint eine verständliche Meldung.
+
+**US09 – Lernplan erstellen**
+
+Als studierende Person möchte ich offene Aufgaben auf verfügbare Tage
+verteilen lassen, damit ich weiss, wann ich für welche Aufgabe lerne.
+
+- Offene Aufgaben werden nach früherer Frist, höherer Priorität
+  und zuletzt kleinerer Aufgaben-ID berücksichtigt.
+- Verfügbare Tage werden chronologisch ab heute bis einschliesslich
+  der jeweiligen Frist verwendet; Aufgaben dürfen aufgeteilt werden.
+- Die Tageskapazität wird nicht überschritten. Der Plan zeigt Datum,
+  Aufgabe und Minuten.
+- Die Berechnung verändert die gespeicherte Verfügbarkeit nicht dauerhaft.
+
+#### Engpässe und Speicherung
+
+**US10 – Zeitmangel erkennen**
+
+Als studierende Person möchte ich Engpässe erkennen,
+damit ich bei fehlender Lernzeit rechtzeitig reagieren kann.
+
+- Für nicht vollständig eingeplante Aufgaben werden Titel, Frist
+  und fehlende Minuten angezeigt.
+- Fehlende Minuten entsprechen dem Aufwand abzüglich eingeplanter Minuten.
+- Überfällige offene Aufgaben werden gekennzeichnet;
+  vollständig eingeplante Aufgaben erhalten keine Engpasswarnung.
+
+**US11 – Daten speichern**
+
+Als studierende Person möchte ich meine Eingaben speichern,
+damit meine Arbeit beim Beenden erhalten bleibt.
+
+- Erfolgreiche Änderungen an Fächern, Aufgaben und Lernzeiten
+  werden automatisch in einer JSON-Datei gespeichert.
+- Aufgabenstatus und Umlaute bleiben erhalten.
+- Schreibfehler werden gemeldet; das Programm meldet keinen falschen Erfolg.
+
+**US12 – Daten laden**
+
+Als studierende Person möchte ich gespeicherte Daten beim Start laden,
+damit ich mit meinen bisherigen Eingaben weiterarbeiten kann.
+
+- Gespeicherte Daten werden inklusive Aufgaben-IDs und Status geladen;
+  neue Aufgaben erhalten weiterhin eindeutige IDs.
+- Fehlt die Datei beim ersten Start, beginnt das Programm mit leeren Daten.
+- Beschädigte oder ungültig aufgebaute Dateien werden verständlich
+  gemeldet und nicht automatisch überschrieben.
 
 ### Use Cases
 
-| ID | Use Case | Ergebnis |
+| ID | Use Case | User Story |
 | --- | --- | --- |
-| UC01 | Fach erfassen | Ein neues Fach steht für Aufgaben zur Auswahl. |
-| UC02 | Aufgabe erfassen | Eine gültige Aufgabe erscheint in der Übersicht. |
-| UC03 | Aufgaben anzeigen | Offene Aufgaben werden nach Fälligkeit angezeigt. |
-| UC04 | Lernzeit erfassen | Verfügbare Minuten sind einem Datum zugeordnet. |
-| UC05 | Lernplan erstellen | Offene Aufgaben erhalten Lernminuten vor ihrer Frist. |
-| UC06 | Engpass anzeigen | Fehlende Minuten pro Aufgabe werden sichtbar. |
-| UC07 | Aufgabe erledigen | Die Aufgabe wird beim nächsten Plan nicht mehr berücksichtigt. |
-| UC08 | Daten speichern und laden | Nach einem Neustart stehen die Eingaben wieder zur Verfügung. |
-| UC09 |
-| UC10 |
-| UC11 |
-| UC12 |
-| 
+| UC01 | Fach erfassen | US01 |
+| UC02 | Aufgabe erfassen | US02 |
+| UC03 | Aufgabe bearbeiten | US03 |
+| UC04 | Aufgaben anzeigen | US04 |
+| UC05 | Aufgabe erledigen | US05 |
+| UC06 | Fortschritt anzeigen | US06 |
+| UC07 | Lernzeit erfassen | US07 |
+| UC08 | Lernzeiten anzeigen | US08 |
+| UC09 | Lernplan erstellen | US09 |
+| UC10 | Zeitmangel erkennen | US10 |
+| UC11 | Daten speichern | US11 |
+| UC12 | Daten laden | US12 |
 
 ### Beispiel für die Abnahme
 
-Eine offene Aufgabe benötigt **120 Minuten** bis Mittwoch. Montag sind **60 Minuten**, Dienstag **30 Minuten** und Donnerstag **90 Minuten** frei. Erwartet werden 60 Minuten am Montag, 30 Minuten am Dienstag, keine Minuten am Donnerstag und eine Warnung über **30 fehlende Minuten**.
+Eine Aufgabe benötigt **120 Minuten** bis Mittwoch.
+Montag sind **60 Minuten**, Dienstag **30 Minuten**
+und Donnerstag **90 Minuten** verfügbar.
+
+Der Plan verteilt 60 Minuten auf Montag und 30 Minuten auf Dienstag.
+Donnerstag wird für diese Aufgabe nicht verwendet, weil er nach der Frist
+liegt. Das Programm zeigt **30 fehlende Minuten** an.
+
+
+## ⚙️ Geplante Umsetzung
+
+### Bedienung
+
+Der Studyplanner wird über ein nummeriertes Konsolenmenü bedient.
+Nach einer Aktion erscheint das Hauptmenü erneut.
+
+| Auswahl | Aktion |
+| --- | --- |
+| 1 | Fach erfassen |
+| 2 | Aufgabe erfassen |
+| 3 | Aufgabe bearbeiten |
+| 4 | Aufgaben anzeigen |
+| 5 | Aufgabe erledigen |
+| 6 | Fortschritt anzeigen |
+| 7 | Lernzeit erfassen |
+| 8 | Lernzeiten anzeigen |
+| 9 | Lernplan und Engpässe anzeigen |
+| 0 | Programm beenden |
+
+Speichern und Laden erfolgen automatisch. Sie benötigen keine
+eigenen Menüoptionen.
+
+### Darstellung der Tage
+
+Wir verwenden konkrete Datumsangaben statt wiederkehrender Wochentage.
+
+- Eingabe: `YYYY-MM-DD`, beispielsweise `2026-10-05`.
+- Anzeige: Datum und Wochentag, beispielsweise `05.10.2026 (Montag)`.
+- Der Wochentag wird aus dem Datum berechnet.
+- Pro Datum wird eine verfügbare Minutenzahl gespeichert.
+- Tage ohne erfasste Lernzeit stehen nicht für die Planung zur Verfügung.
+- Die Planung arbeitet mit Minuten pro Tag und ohne konkrete Uhrzeiten.
+
+Beispiel für die Anzeige der Lernzeiten:
+
+| Datum | Verfügbare Lernzeit |
+| --- | --- |
+| 05.10.2026 (Montag) | 60 Minuten |
+| 06.10.2026 (Dienstag) | 30 Minuten |
+| 08.10.2026 (Donnerstag) | 90 Minuten |
+
+Die Konsolenausgabe zeigt dieselben Angaben als einfache Textliste.
+
+### Fächer und Aufgaben
+
+Fächer werden über ihren Namen erfasst. Bei der Aufgabenerfassung
+werden vorhandene Fächer nummeriert angezeigt und ausgewählt.
+
+Eine Aufgabe enthält:
+
+| Feld | Bedeutung |
+| --- | --- |
+| `id` | Eindeutige Aufgaben-ID |
+| `title` | Aufgabentitel |
+| `subject` | Zugeordnetes Fach |
+| `deadline` | Fälligkeitsdatum |
+| `estimated_minutes` | Geschätzter Aufwand in Minuten |
+| `priority` | 1 = niedrig, 2 = mittel, 3 = hoch |
+| `completed` | Offen oder erledigt |
+
+Neue Aufgaben sind offen. Beim Bearbeiten bleiben ID und Status erhalten.
+Bei der Auswahl einer unbekannten ID erscheint eine Fehlermeldung.
+
+### Lernzeiten
+
+Lernzeiten werden mit Datum und verfügbaren Minuten erfasst.
+
+- Neue Lernzeiten dürfen für heute oder einen zukünftigen Tag erfasst werden.
+- Pro Datum gibt es genau einen Eintrag.
+- Bei erneuter Eingabe für dasselbe Datum wird der bisherige Wert ersetzt.
+- Die Übersicht zeigt die Einträge chronologisch und ihre Gesamtsumme.
+- Vergangene Einträge dürfen gespeichert bleiben, werden aber nicht
+  für einen neuen Plan verwendet.
+
+### Lernplan
+
+Der Lernplan wird bei jeder Auswahl der Menüoption neu berechnet.
+
+1. Erledigte Aufgaben ausschliessen.
+2. Offene Aufgaben nach früherer Frist, höherer Priorität
+   und kleinerer Aufgaben-ID sortieren.
+3. Verfügbare Tage ab heute chronologisch berücksichtigen.
+4. Minuten bis einschliesslich der jeweiligen Aufgabenfrist verteilen.
+5. Nicht einplanbare Minuten als Engpass anzeigen.
+
+Eine Aufgabe kann auf mehrere Tage verteilt werden.
+Die gesamte Zuteilung eines Tages darf seine verfügbare Zeit
+nicht überschreiten.
+
+Der Plan wird nach Datum gruppiert angezeigt. Jeder Eintrag enthält
+Aufgabentitel und zugeteilte Minuten. Die gespeicherten Aufgabenaufwände
+und Lernzeiten werden durch die Berechnung nicht verändert.
+
+### Speicherung
+
+Fächer, Aufgaben und Lernzeiten werden als Listen und Dictionaries
+in `studyplanner_data.json` gespeichert.
+
+- Beim Start werden vorhandene Daten geladen.
+- Nach erfolgreichen Änderungen werden die Daten gespeichert.
+- Der berechnete Plan wird nicht gespeichert, sondern neu erzeugt.
+- Fehlt die Datei beim ersten Start, beginnt das Programm mit leeren Daten.
+- Bei beschädigten Daten wird der normale Start abgebrochen und
+  eine verständliche Meldung angezeigt. Die Datei bleibt erhalten.
+- Schreibfehler werden gemeldet und nicht als erfolgreiche Speicherung
+  dargestellt.
+
+## 👥 Team & Responsibilities
+
+| Person | User Stories | Konkrete Aufgaben |
+| --- | --- | --- |
+| Alisha | US01, US07, US08 | Fächer erfassen; Lernzeiten erfassen und anzeigen |
+| Laura | US02, US03, US05 | Aufgaben erfassen, bearbeiten und als erledigt markieren |
+| Xhavid | US04, US09, US10 | Aufgabenübersicht; Lernplan und Engpasswarnungen |
+| Valentin | US06, US11, US12 | Fortschrittsübersicht; Daten speichern und laden |
+
+### Parallele Entwicklung
+
+Vor der Umsetzung vereinbaren wir die gemeinsamen Datenfelder:
+
+- Fächer: Liste mit Fachnamen.
+- Aufgaben: Liste mit Dictionaries und den Feldern `id`, `title`,
+  `subject`, `deadline`, `estimated_minutes`, `priority` und `completed`.
+- Lernzeiten: Liste mit Dictionaries und den Feldern `date`
+  und `available_minutes`.
+- JSON-Datei: Dictionary mit den Bereichen `subjects`, `tasks`
+  und `availability`.
+
+Alle verwenden dieselben Beispieldaten. So müssen die Funktionen
+anderer Personen noch nicht fertig sein, um die eigene Arbeit zu prüfen.
+
+| Person | Einstieg ohne Wartezeit |
+| --- | --- |
+| Alisha | Fächer und Lernzeiten mit zunächst leeren Listen erfassen |
+| Laura | Aufgaben mit einer vorbereiteten Fächerliste erfassen und bearbeiten |
+| Xhavid | Beispielaufgaben anzeigen und mit vorbereiteten Lernzeiten planen |
+| Valentin | Fortschritt aus Beispielaufgaben berechnen und Beispieldaten speichern und laden |
+
+### Gemeinsame Integration
+
+- Jede Person implementiert und prüft ihre drei User Stories.
+- Änderungen erfolgen hauptsächlich in den eigenen Modulen.
+- `main.py` wird schrittweise ergänzt. Pro Änderung arbeitet nur eine
+  abgesprochene Person daran.
+- Valentin stellt Funktionen zum Speichern und Laden bereit.
+  Die anderen Module führen keine eigenen Dateioperationen aus.
+- Nach einer erfolgreichen Änderung ruft `main.py` die Speicherfunktion auf.
+- Jede Person erstellt eigene Commits und Pull Requests.
+- Nach dem Zusammenführen prüfen wir den gemeinsamen Programmablauf.
 
 ---
 
