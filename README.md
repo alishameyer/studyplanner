@@ -40,6 +40,20 @@ Als studierende Person möchte ich Aufgaben als erledigt markieren, damit sie ni
 
 Als studierende Person möchte ich meine Daten nach einem Neustart wiederfinden, damit ich den Studyplanner wiederholt nutzen kann.
 
+#### US07
+
+#### US08
+
+#### US09
+
+#### US10
+
+#### US11
+
+#### US12
+
+
+
 ### Use Cases
 
 | ID | Use Case | Ergebnis |
@@ -52,6 +66,11 @@ Als studierende Person möchte ich meine Daten nach einem Neustart wiederfinden,
 | UC06 | Engpass anzeigen | Fehlende Minuten pro Aufgabe werden sichtbar. |
 | UC07 | Aufgabe erledigen | Die Aufgabe wird beim nächsten Plan nicht mehr berücksichtigt. |
 | UC08 | Daten speichern und laden | Nach einem Neustart stehen die Eingaben wieder zur Verfügung. |
+| UC09 |
+| UC10 |
+| UC11 |
+| UC12 |
+| 
 
 ### Beispiel für die Abnahme
 
