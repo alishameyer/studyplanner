@@ -19,7 +19,7 @@ anstehen und ob die verfügbare Lernzeit bis zur jeweiligen Frist ausreicht.
 
 Eine studierende Person erfasst Fächer, Lernaufgaben und verfügbare
 Lernminuten in der Konsole. Der Studyplanner zeigt Aufgaben und Fortschritt
-an und erstellt einen Lernplan. Reicht die Zeit bis zur Frist nicht aus,
+an. Reicht die Zeit bis zur Frist nicht aus,
 zeigt er die fehlenden Minuten an. Die Daten bleiben nach einem Neustart
 erhalten.
 
@@ -172,10 +172,14 @@ Eine Aufgabe benötigt **120 Minuten** bis Mittwoch.
 Montag sind **60 Minuten**, Dienstag **30 Minuten**
 und Donnerstag **90 Minuten** verfügbar.
 
-Der Plan verteilt 60 Minuten auf Montag und 30 Minuten auf Dienstag.
-Donnerstag wird für diese Aufgabe nicht verwendet, weil er nach der Frist
-liegt. Das Programm zeigt **30 fehlende Minuten** an.
+## 👥 Team & Responsibilities
 
+| Person | User Stories | Konkrete Aufgaben |
+| --- | --- | --- |
+| Alisha | US01, US07, US08 | Fächer erfassen; Lernzeiten erfassen und anzeigen |
+| Laura | US02, US03, US05 | Aufgaben erfassen, bearbeiten und als erledigt markieren |
+| Xhavid | US04, US09, US10 | Aufgabenübersicht; Lernplan und Engpasswarnungen |
+| Valentin | US06, US11, US12 | Fortschrittsübersicht; Daten speichern und laden |
 
 ## ⚙️ Geplante Umsetzung
 
@@ -209,8 +213,6 @@ Wir verwenden konkrete Datumsangaben statt wiederkehrender Wochentage.
 - Anzeige: Datum und Wochentag, beispielsweise `05.10.2026 (Montag)`.
 - Der Wochentag wird aus dem Datum berechnet.
 - Pro Datum wird eine verfügbare Minutenzahl gespeichert.
-- Tage ohne erfasste Lernzeit stehen nicht für die Planung zur Verfügung.
-- Die Planung arbeitet mit Minuten pro Tag und ohne konkrete Uhrzeiten.
 
 Beispiel für die Anzeige der Lernzeiten:
 
@@ -250,27 +252,6 @@ Lernzeiten werden mit Datum und verfügbaren Minuten erfasst.
 - Pro Datum gibt es genau einen Eintrag.
 - Bei erneuter Eingabe für dasselbe Datum wird der bisherige Wert ersetzt.
 - Die Übersicht zeigt die Einträge chronologisch und ihre Gesamtsumme.
-- Vergangene Einträge dürfen gespeichert bleiben, werden aber nicht
-  für einen neuen Plan verwendet.
-
-### Lernplan
-
-Der Lernplan wird bei jeder Auswahl der Menüoption neu berechnet.
-
-1. Erledigte Aufgaben ausschliessen.
-2. Offene Aufgaben nach früherer Frist, höherer Priorität
-   und kleinerer Aufgaben-ID sortieren.
-3. Verfügbare Tage ab heute chronologisch berücksichtigen.
-4. Minuten bis einschliesslich der jeweiligen Aufgabenfrist verteilen.
-5. Nicht einplanbare Minuten als Engpass anzeigen.
-
-Eine Aufgabe kann auf mehrere Tage verteilt werden.
-Die gesamte Zuteilung eines Tages darf seine verfügbare Zeit
-nicht überschreiten.
-
-Der Plan wird nach Datum gruppiert angezeigt. Jeder Eintrag enthält
-Aufgabentitel und zugeteilte Minuten. Die gespeicherten Aufgabenaufwände
-und Lernzeiten werden durch die Berechnung nicht verändert.
 
 ### Speicherung
 
@@ -285,15 +266,6 @@ in `studyplanner_data.json` gespeichert.
   eine verständliche Meldung angezeigt. Die Datei bleibt erhalten.
 - Schreibfehler werden gemeldet und nicht als erfolgreiche Speicherung
   dargestellt.
-
-## 👥 Team & Responsibilities
-
-| Person | User Stories | Konkrete Aufgaben |
-| --- | --- | --- |
-| Alisha | US01, US07, US08 | Fächer erfassen; Lernzeiten erfassen und anzeigen |
-| Laura | US02, US03, US05 | Aufgaben erfassen, bearbeiten und als erledigt markieren |
-| Xhavid | US04, US09, US10 | Aufgabenübersicht; Lernplan und Engpasswarnungen |
-| Valentin | US06, US11, US12 | Fortschrittsübersicht; Daten speichern und laden |
 
 ### Parallele Entwicklung
 
