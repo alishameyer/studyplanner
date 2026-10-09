@@ -25,11 +25,11 @@ erhalten.
 
 ### User Stories und Acceptance Criteria
 
-<img width="652" height="721" alt="image" src="https://github.com/user-attachments/assets/561894a3-99d1-4e03-a39e-d167816ddc40" />
+<img width="592" height="642" alt="user-stories drawio" src="https://github.com/user-attachments/assets/09237b59-6b9f-47f0-80a0-d824693cc0c5" />
 
 #### Fächer und Aufgaben
 
-**US01 – Fach erfassen**
+**US01 – Fach erfassen: Alisha**
 
 Als studierende Person möchte ich Fächer erfassen,
 damit ich Aufgaben einem Fach zuordnen kann.
@@ -38,7 +38,7 @@ damit ich Aufgaben einem Fach zuordnen kann.
 - Bereits vorhandene Fachnamen werden nicht doppelt angelegt.
 - Ein erfasstes Fach steht bei der Aufgabenerfassung zur Auswahl.
 
-**US02 – Aufgabe erfassen**
+**US02 – Aufgabe erfassen: Laura**
 
 Als studierende Person möchte ich Lernaufgaben erfassen,
 damit ich weiss, was ich bis wann erledigen muss.
@@ -48,7 +48,7 @@ damit ich weiss, was ich bis wann erledigen muss.
 - Jede Aufgabe erhält eine eindeutige ID und den Status „offen“.
 - Ungültige Eingaben werden verständlich gemeldet und nicht gespeichert.
 
-**US03 – Aufgabe bearbeiten**
+**US03 – Aufgabe bearbeiten: Laura**
 
 Als studierende Person möchte ich Aufgaben bearbeiten,
 damit ich Änderungen an Inhalt, Frist oder Aufwand berücksichtigen kann.
@@ -59,7 +59,7 @@ damit ich Änderungen an Inhalt, Frist oder Aufwand berücksichtigen kann.
 
 #### Übersicht und Fortschritt
 
-**US04 – Aufgaben anzeigen**
+**US04 – Aufgaben anzeigen: Xhavid**
 
 Als studierende Person möchte ich meine Aufgaben nach Frist anzeigen,
 damit ich erkenne, welche Aufgaben als Nächstes anstehen.
@@ -69,7 +69,7 @@ damit ich erkenne, welche Aufgaben als Nächstes anstehen.
   erledigte Aufgaben werden getrennt angezeigt.
 - Ohne Aufgaben erscheint eine verständliche Meldung.
 
-**US05 – Aufgabe erledigen**
+**US05 – Aufgabe erledigen: Laura**
 
 Als studierende Person möchte ich Aufgaben als erledigt markieren,
 damit abgeschlossene Aufgaben nicht erneut eingeplant werden.
@@ -78,7 +78,7 @@ damit abgeschlossene Aufgaben nicht erneut eingeplant werden.
 - Die Änderung wird bestätigt und ist in der Übersicht sichtbar.
 - Bei der nächsten Planberechnung wird die Aufgabe ausgeschlossen.
 
-**US06 – Fortschritt anzeigen**
+**US06 – Fortschritt anzeigen: Valentin**
 
 Als studierende Person möchte ich meinen Fortschritt sehen,
 damit ich erkenne, wie viele Aufgaben abgeschlossen sind.
@@ -89,7 +89,7 @@ damit ich erkenne, wie viele Aufgaben abgeschlossen sind.
 
 #### Lernzeiten und Planung
 
-**US07 – Lernzeit erfassen**
+**US07 – Lernzeit erfassen: Alisha**
 
 Als studierende Person möchte ich verfügbare Lernminuten pro Tag erfassen,
 damit der Plan meine tatsächliche Zeit berücksichtigt.
@@ -98,7 +98,7 @@ damit der Plan meine tatsächliche Zeit berücksichtigt.
 - Eine neue Eingabe für denselben Tag ersetzt den bisherigen Wert.
 - Ungültige Angaben werden verständlich gemeldet und nicht übernommen.
 
-**US08 – Lernzeiten anzeigen**
+**US08 – Lernzeiten anzeigen: Alisha**
 
 Als studierende Person möchte ich meine Lernzeiten anzeigen,
 damit ich die erfasste Verfügbarkeit überprüfen kann.
@@ -107,22 +107,17 @@ damit ich die erfasste Verfügbarkeit überprüfen kann.
 - Die Summe der angezeigten Minuten wird ausgegeben.
 - Ohne Einträge erscheint eine verständliche Meldung.
 
-**US09 – Lernplan erstellen**
+**US09 – Aufgaben nach Fach filtern: Xhavid**
 
-Als studierende Person möchte ich offene Aufgaben auf verfügbare Tage
-verteilen lassen, damit ich weiss, wann ich für welche Aufgabe lerne.
+Als studierende Person möchte ich Aufgaben eines bestimmten Fachs anzeigen, damit ich mich gezielt auf ein Fach konzentrieren kann. 
 
-- Offene Aufgaben werden nach früherer Frist, höherer Priorität
-  und zuletzt kleinerer Aufgaben-ID berücksichtigt.
-- Verfügbare Tage werden chronologisch ab heute bis einschliesslich
-  der jeweiligen Frist verwendet; Aufgaben dürfen aufgeteilt werden.
-- Die Tageskapazität wird nicht überschritten. Der Plan zeigt Datum,
-  Aufgabe und Minuten.
-- Die Berechnung verändert die gespeicherte Verfügbarkeit nicht dauerhaft.
+- Vorhandene Fächer werden nummeriert zur Auswahl angezeigt. 
+- Es werden nur die Aufgaben des gewählten Fachs nach aufsteigender Frist angezeigt; offene     und erledigte getrennt. 
+- Hat das Fach keine Aufgaben, erscheint eine verständliche Meldung. 
 
 #### Engpässe und Speicherung
 
-**US10 – Zeitmangel erkennen**
+**US10 – Zeitmangel erkennenz: Xhavid**
 
 Als studierende Person möchte ich Engpässe erkennen,
 damit ich bei fehlender Lernzeit rechtzeitig reagieren kann.
@@ -133,7 +128,7 @@ damit ich bei fehlender Lernzeit rechtzeitig reagieren kann.
 - Überfällige offene Aufgaben werden gekennzeichnet;
   vollständig eingeplante Aufgaben erhalten keine Engpasswarnung.
 
-**US11 – Daten speichern**
+**US11 – Daten speichern: Valentin**
 
 Als studierende Person möchte ich meine Eingaben speichern,
 damit meine Arbeit beim Beenden erhalten bleibt.
@@ -143,7 +138,7 @@ damit meine Arbeit beim Beenden erhalten bleibt.
 - Aufgabenstatus und Umlaute bleiben erhalten.
 - Schreibfehler werden gemeldet; das Programm meldet keinen falschen Erfolg.
 
-**US12 – Daten laden**
+**US12 – Daten laden: Valentin**
 
 Als studierende Person möchte ich gespeicherte Daten beim Start laden,
 damit ich mit meinen bisherigen Eingaben weiterarbeiten kann.
@@ -166,7 +161,7 @@ damit ich mit meinen bisherigen Eingaben weiterarbeiten kann.
 | UC06 | Fortschritt anzeigen | US06 |
 | UC07 | Lernzeit erfassen | US07 |
 | UC08 | Lernzeiten anzeigen | US08 |
-| UC09 | Lernplan erstellen | US09 |
+| UC09 | Aufgaben nach Fach filtern | US09 |
 | UC10 | Zeitmangel erkennen | US10 |
 | UC11 | Daten speichern | US11 |
 | UC12 | Daten laden | US12 |
@@ -199,7 +194,8 @@ Nach einer Aktion erscheint das Hauptmenü erneut.
 | 6 | Fortschritt anzeigen |
 | 7 | Lernzeit erfassen |
 | 8 | Lernzeiten anzeigen |
-| 9 | Lernplan und Engpässe anzeigen |
+| 9 | Aufgaben nach Fach filtern |
+| 10 | Engpässe anzeigen |
 | 0 | Programm beenden |
 
 Speichern und Laden erfolgen automatisch. Sie benötigen keine
