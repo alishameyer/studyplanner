@@ -11,9 +11,11 @@ def load_menu():
     if not os.path.exists(MENU_FILE):
         # create starter menu if not found
         starter = [
-            "Margherita;Medium;12.50",
-            "Salami;Large;15.00",
-            "Funghi;Small;9.00"
+            "Grundlagen Programmieren",
+            "Mathematik 1",
+            "Statistik 1",
+            "Principales of Management",
+            "Digital Business"
         ]
         with open(MENU_FILE, "w", encoding="utf-8") as f:
             f.write("\n".join(starter))
@@ -40,7 +42,7 @@ def get_next_invoice_filename():
 def write_invoice(order, total, discounts_applied):
     filename = get_next_invoice_filename()
     with open(filename, "w", encoding="utf-8") as f:
-        f.write("🍕 PIZZA RP INVOICE\n")
+        f.write("Studyplanner\n")
         f.write("---------------------\n")
         for p in order:
             f.write(f"{p['name']} ({p['size']}): CHF {p['price']:.2f}\n")
@@ -55,7 +57,7 @@ def write_invoice(order, total, discounts_applied):
 # ---------- Ordering Logic ----------
 
 def show_menu(menu):
-    print("\n--- 🍕 Pizza Menu ---")
+    print("\n--- Studyplanner ---")
     for i, p in enumerate(menu, start=1):
         print(f"{i}. {p['name']} ({p['size']}) - CHF {p['price']:.2f}")
     print("---------------------")
@@ -99,11 +101,11 @@ def main():
     menu = load_menu()
 
     while True:
-        print("\n=== 🍕 PizzaRP ===")
-        print("1. Show menu")
-        print("2. Create order and print invoice")
-        print("3. Exit")
-        choice = input("Choose an option: ").strip()
+        print("\n=== Studyplanner ===")
+        print("Neues Fach erfassen")
+        print("Fächer bearbeiten")
+        print("Beenden")
+        choice = input("Neues Fach erfassen").strip()
 
         if choice == "1":
             show_menu(menu)
