@@ -76,6 +76,33 @@ def show_tasks(tasks):
         print("  Keine erledigten Aufgaben.")
 
 
+def filter_by_subject(tasks, subject):
+    """Gibt nur die Aufgaben des gewählten Fachs zurück."""
+    return [task for task in tasks if task["subject"] == subject]
+
+
+def show_tasks_by_subject(tasks, subjects):
+    """US09: Fächer nummeriert anzeigen und Aufgaben des gewählten Fachs ausgeben."""
+    print("\n--- Aufgaben nach Fach filtern ---")
+    if not subjects:
+        print("Es sind noch keine Fächer erfasst.")
+        return
+    for number, subject in enumerate(subjects, start=1):
+        print(f"  ({number}) {subject}")
+
+    choice = input("Auswahl: ").strip()
+    if not choice.isdigit() or not 1 <= int(choice) <= len(subjects):
+        print(f"⚠️ Bitte eine Zahl von 1 bis {len(subjects)} wählen.")
+        return
+
+    subject = subjects[int(choice) - 1]
+    subject_tasks = filter_by_subject(tasks, subject)
+    if not subject_tasks:
+        print(f"Für das Fach {subject} gibt es keine Aufgaben.")
+        return
+    show_tasks(subject_tasks)
+
+
 if __name__ == "__main__":
     show_tasks(SAMPLE_TASKS)
     show_tasks([])
