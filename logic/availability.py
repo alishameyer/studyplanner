@@ -14,3 +14,11 @@ def set_availability(data, day, minutes):
         "date": day,
         "availability_minutes": minutes,
     })
+
+
+def availability_order(entry):
+    return entry["date"]
+
+
+def list_availability(data):
+    return sorted(data["availability"], key=availability_order)
