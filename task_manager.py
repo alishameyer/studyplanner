@@ -1,106 +1,152 @@
 """Aufgaben verwalten: erstellen (US02), bearbeiten (US03) und löschen.
 
 Das Untermenü "Aufgabe" bietet:
-(1) Aufgabe erstellen, (2) Aufgabe bearbeiten, (3) Aufgabe löschen, (4) Zurück
+(1) Aufgabe erstellen, (2) Aufgabe bearbeiten, (3) Aufgabe löschen,
+(4) Zurück
 
-Das Modul führt keine Dateioperationen aus. Nach einer erfolgreichen
-Änderung wird die übergebene Funktion `save` aufgerufen (z. B. aus main.py).
+Das Modul liest und schreibt keine Dateien. Nach einer erfolgreichen
+Änderung wird die übergebene Funktion `save` aufgerufen.
 """
 
-from datetime import date, datetime
+from datetime import date
 
 from task_overview import PRIORITIES, format_task
 
-
-# ---------- Validierung ----------
-
-def parse_title(text):
-    title = text.strip()
-    if not title:
-        raise ValueError("Der Titel darf nicht leer sein.")
-    return title
+DAYS_PER_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 
-def parse_deadline(text):
-    """Liest 'DD-MM-YYYY' ein und gibt das Datum als 'YYYY-MM-DD' zurück."""
-    try:
-        deadline = datetime.strptime(text.strip(), "%d-%m-%Y").date()
-    except ValueError:
-        raise ValueError("Ungültiges Datum. Bitte im Format DD-MM-YYYY eingeben.")
-    if deadline < date.today():
-        raise ValueError("Die Frist darf nicht in der Vergangenheit liegen.")
-    return deadline.isoformat()
+# ---------- Datum prüfen ----------
+
+def is_leap_year(year):
+    """Gibt True zurück, wenn das Jahr ein Schaltjahr ist."""
+    if year % 400 == 0:
+        return True
+    if year % 100 == 0:
+        return False
+    return year % 4 == 0
+
+
+def is_valid_date(text):
+    """Prüft, ob der Text ein echtes Datum im Format DD-MM-YYYY ist."""
+    parts = text.split("-")
+    if len(parts) != 3:
+        return False
+    day, month, year = parts
+    if not day.isdigit() or not month.isdigit() or not year.isdigit():
+        return False
+    if len(year) != 4 or int(month) < 1 or int(month) > 12:
+        return False
+
+    last_day = DAYS_PER_MONTH[int(month) - 1]
+    if int(month) == 2 and is_leap_year(int(year)):
+        last_day = 29
+    return 1 <= int(day) <= last_day
+
+
+def to_iso_date(text):
+    """Wandelt '1-12-2099' in '2099-12-01' um."""
+    day, month, year = text.split("-")
+    if len(day) == 1:
+        day = "0" + day
+    if len(month) == 1:
+        month = "0" + month
+    return f"{year}-{month}-{day}"
 
 
 def to_input_date(iso_date):
-    """Wandelt 'YYYY-MM-DD' in die Eingabeform 'DD-MM-YYYY' um."""
-    return date.fromisoformat(iso_date).strftime("%d-%m-%Y")
+    """Wandelt '2099-12-01' in die Eingabeform '01-12-2099' um."""
+    return f"{iso_date[8:10]}-{iso_date[5:7]}-{iso_date[0:4]}"
 
 
-def parse_minutes(text):
-    text = text.strip()
-    if not text.isdigit() or int(text) <= 0:
-        raise ValueError("Der Aufwand muss eine positive ganze Minutenzahl sein.")
-    return int(text)
+# ---------- Eingaben ----------
+# Wird `current` übergeben (beim Bearbeiten), behält eine leere
+# Eingabe den bisherigen Wert.
 
-
-def parse_priority(text):
-    text = text.strip()
-    if text not in ("1", "2", "3"):
-        raise ValueError("Die Priorität muss 1, 2 oder 3 sein.")
-    return int(text)
-
-
-def make_subject_parser(subjects):
-    def parse_subject(text):
-        text = text.strip()
-        if not text.isdigit() or not 1 <= int(text) <= len(subjects):
-            raise ValueError(f"Bitte eine Zahl von 1 bis {len(subjects)} wählen.")
-        return subjects[int(text) - 1]
-    return parse_subject
-
-
-# ---------- Eingabe ----------
-
-def ask(prompt, parse, current=None):
-    """Fragt so lange, bis die Eingabe gültig ist.
-
-    Mit `current` (beim Bearbeiten) behält eine leere Eingabe den alten Wert.
-    """
+def ask_title(prompt, current=None):
     while True:
-        text = input(prompt)
-        if current is not None and not text.strip():
+        text = input(prompt).strip()
+        if text == "" and current is not None:
             return current
-        try:
-            return parse(text)
-        except ValueError as error:
-            print(f"⚠️ {error}")
+        if text != "":
+            return text
+        print("⚠️ Der Titel darf nicht leer sein.")
 
 
-def show_subjects(subjects):
-    for number, subject in enumerate(subjects, start=1):
-        print(f"  ({number}) {subject}")
+def ask_subject(subjects, current=None):
+    for number in range(1, len(subjects) + 1):
+        print(f"  ({number}) {subjects[number - 1]}")
 
+    while True:
+        text = input("Auswahl: ").strip()
+        if text == "" and current is not None:
+            return current
+        if text.isdigit() and 1 <= int(text) <= len(subjects):
+            return subjects[int(text) - 1]
+        print(f"⚠️ Bitte eine Zahl von 1 bis {len(subjects)} wählen.")
+
+
+def ask_deadline(prompt, current=None):
+    today = str(date.today())  # z. B. "2026-11-09"
+    while True:
+        text = input(prompt).strip()
+        if text == "" and current is not None:
+            return current
+        if not is_valid_date(text):
+            print("⚠️ Ungültiges Datum. Bitte im Format DD-MM-YYYY "
+                  "eingeben.")
+        elif to_iso_date(text) < today:
+            print("⚠️ Die Frist darf nicht in der Vergangenheit liegen.")
+        else:
+            return to_iso_date(text)
+
+
+def ask_minutes(prompt, current=None):
+    while True:
+        text = input(prompt).strip()
+        if text == "" and current is not None:
+            return current
+        if text.isdigit() and int(text) > 0:
+            return int(text)
+        print("⚠️ Der Aufwand muss eine positive ganze Minutenzahl sein.")
+
+
+def ask_priority(prompt, current=None):
+    while True:
+        text = input(prompt).strip()
+        if text == "" and current is not None:
+            return current
+        if text == "1" or text == "2" or text == "3":
+            return int(text)
+        print("⚠️ Die Priorität muss 1, 2 oder 3 sein.")
+
+
+# ---------- Aufgaben suchen ----------
 
 def find_task(tasks, text):
     """Sucht eine Aufgabe über ihre ID; gibt None zurück, wenn sie fehlt."""
     text = text.strip()
-    if text.isdigit():
-        for task in tasks:
-            if task["id"] == int(text):
-                return task
+    if not text.isdigit():
+        return None
+    for task in tasks:
+        if task["id"] == int(text):
+            return task
     return None
 
 
 def choose_task(tasks):
-    """Zeigt alle Aufgaben mit ihrer ID und fragt nach der gewünschten ID."""
+    """Zeigt alle Aufgaben mit ID und fragt nach der gewünschten ID."""
     for task in tasks:
         print("  " + format_task(task))
     return find_task(tasks, input("ID der Aufgabe (Zahl nach 'ID'): "))
 
 
 def next_id(tasks):
-    return max((task["id"] for task in tasks), default=0) + 1
+    """Gibt die nächste freie ID zurück (grösste ID + 1)."""
+    highest = 0
+    for task in tasks:
+        if task["id"] > highest:
+            highest = task["id"]
+    return highest + 1
 
 
 # ---------- Aktionen ----------
@@ -108,17 +154,17 @@ def next_id(tasks):
 def create_task(tasks, subjects):
     """Erfasst eine neue offene Aufgabe. Gibt True bei Erfolg zurück."""
     print("\n--- Aufgabe erstellen ---")
-    if not subjects:
+    if len(subjects) == 0:
         print("⚠️ Bitte zuerst ein Fach erfassen.")
         return False
 
-    title = ask("Titel: ", parse_title)
+    title = ask_title("Titel: ")
     print("Fach:")
-    show_subjects(subjects)
-    subject = ask("Auswahl: ", make_subject_parser(subjects))
-    deadline = ask("Frist (DD-MM-YYYY): ", parse_deadline)
-    minutes = ask("Aufwand in Minuten: ", parse_minutes)
-    priority = ask("Priorität (1 = niedrig, 2 = mittel, 3 = hoch): ", parse_priority)
+    subject = ask_subject(subjects)
+    deadline = ask_deadline("Frist (DD-MM-YYYY): ")
+    minutes = ask_minutes("Aufwand in Minuten: ")
+    priority = ask_priority("Priorität (1 = niedrig, 2 = mittel, "
+                            "3 = hoch): ")
 
     task = {"id": next_id(tasks), "title": title, "subject": subject,
             "deadline": deadline, "estimated_minutes": minutes,
@@ -129,7 +175,7 @@ def create_task(tasks, subjects):
 
 
 def edit_task(tasks, subjects):
-    """Bearbeitet eine Aufgabe über ihre ID; ID und Status bleiben erhalten."""
+    """Bearbeitet eine Aufgabe; ID und Status bleiben gleich."""
     print("\n--- Aufgabe bearbeiten ---")
     task = choose_task(tasks)
     if task is None:
@@ -138,19 +184,25 @@ def edit_task(tasks, subjects):
 
     print(format_task(task))
     print("Leere Eingabe behält den bisherigen Wert.")
-    title = ask(f"Titel [{task['title']}]: ", parse_title, task["title"])
-    print(f"Fach [{task['subject']}]:")
-    show_subjects(subjects)
-    subject = ask("Auswahl: ", make_subject_parser(subjects), task["subject"])
-    deadline = ask(f"Frist (DD-MM-YYYY) [{to_input_date(task['deadline'])}]: ",
-                   parse_deadline, task["deadline"])
-    minutes = ask(f"Aufwand in Minuten [{task['estimated_minutes']}]: ",
-                  parse_minutes, task["estimated_minutes"])
-    priority = ask(f"Priorität [{task['priority']} = {PRIORITIES[task['priority']]}]: ",
-                   parse_priority, task["priority"])
+    old_deadline = to_input_date(task["deadline"])
+    old_priority = f"{task['priority']} = {PRIORITIES[task['priority']]}"
 
-    task.update({"title": title, "subject": subject, "deadline": deadline,
-                 "estimated_minutes": minutes, "priority": priority})
+    title = ask_title(f"Titel [{task['title']}]: ", task["title"])
+    print(f"Fach [{task['subject']}]:")
+    subject = ask_subject(subjects, task["subject"])
+    deadline = ask_deadline(f"Frist (DD-MM-YYYY) [{old_deadline}]: ",
+                            task["deadline"])
+    minutes = ask_minutes(f"Aufwand in Minuten "
+                          f"[{task['estimated_minutes']}]: ",
+                          task["estimated_minutes"])
+    priority = ask_priority(f"Priorität [{old_priority}]: ",
+                            task["priority"])
+
+    task["title"] = title
+    task["subject"] = subject
+    task["deadline"] = deadline
+    task["estimated_minutes"] = minutes
+    task["priority"] = priority
     print(f"✅ Aufgabe geändert: {format_task(task)}")
     return True
 
@@ -164,7 +216,8 @@ def delete_task(tasks):
         return False
 
     print(format_task(task))
-    if input("Wirklich löschen? (j/n): ").strip().lower() != "j":
+    answer = input("Wirklich löschen? (j/n): ").strip()
+    if answer != "j" and answer != "J":
         print("Löschen abgebrochen.")
         return False
     tasks.remove(task)
@@ -175,7 +228,7 @@ def delete_task(tasks):
 # ---------- Untermenü ----------
 
 def task_menu(tasks, subjects, save=None):
-    """Untermenü "Aufgabe". Ruft nach jeder erfolgreichen Änderung `save` auf."""
+    """Untermenü "Aufgabe". Ruft nach jeder Änderung `save` auf."""
     while True:
         print("\n=== Aufgabe ===")
         print("(1) Aufgabe erstellen")
@@ -184,6 +237,7 @@ def task_menu(tasks, subjects, save=None):
         print("(4) Zurück")
         choice = input("Auswahl: ").strip()
 
+        changed = False
         if choice == "1":
             changed = create_task(tasks, subjects)
         elif choice == "2":
@@ -194,7 +248,6 @@ def task_menu(tasks, subjects, save=None):
             return
         else:
             print("⚠️ Ungültige Auswahl. Bitte 1 bis 4 eingeben.")
-            continue
 
         if changed and save is not None:
             save()
@@ -203,8 +256,11 @@ def task_menu(tasks, subjects, save=None):
 if __name__ == "__main__":
     from task_overview import SAMPLE_TASKS, show_tasks
 
-    demo_subjects = ["Grundlagen Programmieren", "Mathematik 1", "Statistik 1",
-                     "Principales of Management", "Digital Business"]
-    demo_tasks = [dict(task) for task in SAMPLE_TASKS]
+    demo_subjects = ["Grundlagen Programmieren", "Mathematik 1",
+                     "Statistik 1", "Principales of Management",
+                     "Digital Business"]
+    demo_tasks = []
+    for sample_task in SAMPLE_TASKS:
+        demo_tasks.append(sample_task.copy())
     task_menu(demo_tasks, demo_subjects)
     show_tasks(demo_tasks)

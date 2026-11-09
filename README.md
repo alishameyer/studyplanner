@@ -117,7 +117,7 @@ Als studierende Person möchte ich Aufgaben eines bestimmten Fachs anzeigen, dam
 
 #### Engpässe und Speicherung
 
-**US10 – Zeitmangel erkennenz: Xhavid**
+**US10 – Zeitmangel erkennen: Xhavid**
 
 Als studierende Person möchte ich Engpässe erkennen,
 damit ich bei fehlender Lernzeit rechtzeitig reagieren kann.
@@ -347,8 +347,8 @@ werden verständlich gemeldet und nicht gespeichert.
 	    print(f"⚠️ Bitte eine Zahl von 1 bis {len(subjects)} wählen.")
 	```
 
-- **Aufgabenfelder** (`task_manager.py`): Titel nicht leer, Frist im Format
-  `DD-MM-YYYY` und nicht in der Vergangenheit, Aufwand als positive ganze
+- **Aufgabenfelder** (`task_manager.py`): Titel nicht leer, Frist als Eingabe im Format
+  `DD-MM-YYYY` (gespeichert als `YYYY-MM-DD`) und nicht in der Vergangenheit, Aufwand als positive ganze
   Minutenzahl, Priorität 1 bis 3:
 	```python
 	if not text.isdigit() or int(text) <= 0:

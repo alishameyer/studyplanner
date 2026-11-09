@@ -1,10 +1,11 @@
 """US10 – Zeitmangel erkennen (Xhavid).
 
-Plant die offenen Aufgaben auf die verfügbaren Lernzeiten (früheste Frist
-zuerst) und meldet Aufgaben, deren Aufwand nicht vollständig eingeplant
-werden kann. Das Modul führt keine Dateioperationen aus.
+Verteilt die verfügbaren Lernzeiten auf die offenen Aufgaben
+(früheste Frist zuerst) und meldet Aufgaben, deren Aufwand nicht
+vollständig eingeplant werden kann.
 
-Lernzeiten: Liste mit Dictionaries {"date": "YYYY-MM-DD", "available_minutes": int}.
+Lernzeiten: Liste mit Dictionaries
+{"date": "YYYY-MM-DD", "available_minutes": int}.
 """
 
 from datetime import date
@@ -18,29 +19,47 @@ SAMPLE_AVAILABILITY = [
 ]
 
 
+def get_open_tasks(tasks):
+    """Gibt die offenen Aufgaben nach Frist sortiert zurück."""
+    open_tasks = []
+    for task in tasks:
+        if not task["completed"]:
+            open_tasks.append(task)
+    return sort_by_deadline(open_tasks)
+
+
 def planned_minutes(tasks, availability):
-    """Verteilt die Lernzeit auf offene Aufgaben; gibt {Aufgaben-ID: Minuten} zurück."""
-    remaining = {entry["date"]: entry["available_minutes"] for entry in availability}
+    """Gibt {Aufgaben-ID: eingeplante Minuten} zurück."""
+    # Noch freie Minuten pro Tag
+    remaining = {}
+    for entry in availability:
+        remaining[entry["date"]] = entry["available_minutes"]
+
     planned = {}
-    for task in sort_by_deadline([t for t in tasks if not t["completed"]]):
+    for task in get_open_tasks(tasks):
         planned[task["id"]] = 0
         for day in sorted(remaining):
+            # Tage nach der Frist helfen dieser Aufgabe nicht mehr.
             if day > task["deadline"]:
                 break
-            used = min(remaining[day], task["estimated_minutes"] - planned[task["id"]])
-            remaining[day] -= used
-            planned[task["id"]] += used
+            still_needed = task["estimated_minutes"] - planned[task["id"]]
+            used = min(remaining[day], still_needed)
+            remaining[day] = remaining[day] - used
+            planned[task["id"]] = planned[task["id"]] + used
     return planned
 
 
 def find_shortages(tasks, availability, today=None):
-    """Gibt (Aufgabe, fehlende Minuten, überfällig) für Aufgaben mit Engpass zurück."""
-    today = (today or date.today()).isoformat()
+    """Gibt (Aufgabe, fehlende Minuten, überfällig) pro Engpass zurück."""
+    if today is None:
+        today = date.today()
+    today_text = str(today)  # z. B. "2026-11-09"
+
     planned = planned_minutes(tasks, availability)
     shortages = []
-    for task in sort_by_deadline([t for t in tasks if not t["completed"]]):
+    for task in get_open_tasks(tasks):
         missing = task["estimated_minutes"] - planned[task["id"]]
-        overdue = task["deadline"] < today
+        overdue = task["deadline"] < today_text
         if missing > 0 or overdue:
             shortages.append((task, missing, overdue))
     return shortages
@@ -50,14 +69,17 @@ def show_shortages(tasks, availability, today=None):
     """Gibt die Engpasswarnungen in der Konsole aus."""
     print("\n--- Engpässe ---")
     shortages = find_shortages(tasks, availability, today)
-    if not shortages:
-        print("Keine Engpässe: Alle offenen Aufgaben sind vollständig eingeplant.")
+    if len(shortages) == 0:
+        print("Keine Engpässe: Alle offenen Aufgaben sind vollständig "
+              "eingeplant.")
         return
-    for task, missing, overdue in shortages:
-        line = (f"  {task['title']} | Frist: {format_date(task['deadline'])} | "
-                f"Fehlend: {missing} Min.")
+
+    for shortage in shortages:
+        task, missing, overdue = shortage
+        line = (f"  {task['title']} | Frist: {format_date(task['deadline'])}"
+                f" | Fehlend: {missing} Min.")
         if overdue:
-            line += " | ÜBERFÄLLIG"
+            line = line + " | ÜBERFÄLLIG"
         print(line)
 
 

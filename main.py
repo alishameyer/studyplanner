@@ -14,9 +14,14 @@ SAMPLE_SUBJECTS = ["Grundlagen Programmieren", "Mathematik 1", "Statistik 1",
 
 
 def main():
-    subjects = list(SAMPLE_SUBJECTS)
-    tasks = [dict(task) for task in SAMPLE_TASKS]
-    availability = [dict(entry) for entry in SAMPLE_AVAILABILITY]
+    # Kopien, damit die Beispieldaten selbst unverändert bleiben.
+    subjects = SAMPLE_SUBJECTS.copy()
+    tasks = []
+    for task in SAMPLE_TASKS:
+        tasks.append(task.copy())
+    availability = []
+    for entry in SAMPLE_AVAILABILITY:
+        availability.append(entry.copy())
 
     while True:
         print("\n=== Studyplanner ===")
