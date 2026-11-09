@@ -343,7 +343,11 @@ werden verständlich gemeldet und nicht gespeichert.
 - **Fachauswahl** (`task_filter.py`): Nur Zahlen im gültigen Bereich
   werden akzeptiert:
 	```python
-	if not choice.isdigit() or not 1 <= int(choice) <= len(subjects):
+	try:
+	    choice = int(input("Auswahl: "))
+	except ValueError:
+	    choice = 0
+	if choice < 1 or choice > len(subjects):
 	    print(f"⚠️ Bitte eine Zahl von 1 bis {len(subjects)} wählen.")
 	```
 

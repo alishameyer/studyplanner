@@ -24,15 +24,15 @@ SAMPLE_TASKS = [
      "priority": 3, "completed": True},
 ]
 
-# Wandelt ein Datum von YYYY-MM-DD in DD.MM.YYYY (Wochentag) um.
 def format_date(iso_date):
+    """Wandelt YYYY-MM-DD in DD.MM.YYYY (Wochentag) um."""
     year = iso_date[0:4]
     month = iso_date[5:7]
     day = iso_date[8:10]
     weekday = date(int(year), int(month), int(day)).weekday()
     return f"{day}.{month}.{year} ({WEEKDAYS[weekday]})"
 
-    
+
 def sort_by_deadline(tasks):
     """Sortiert Aufgaben nach Frist, bei gleicher Frist nach ID."""
     # Tupel werden zuerst nach der Frist, dann nach der ID sortiert.
@@ -42,8 +42,8 @@ def sort_by_deadline(tasks):
     pairs.sort()
 
     sorted_tasks = []
-    for pair in pairs:
-        sorted_tasks.append(pair[2])
+    for deadline, task_id, task in pairs:
+        sorted_tasks.append(task)
     return sorted_tasks
 
 
@@ -61,7 +61,7 @@ def split_tasks(tasks):
 
 def format_task(task):
     """Eine Zeile mit ID, Titel, Fach, Frist, Aufwand und Priorität."""
-    priority = PRIORITIES.get(task["priority"], str(task["priority"]))
+    priority = PRIORITIES[task["priority"]]
     deadline = format_date(task["deadline"])
     return (f"ID {task['id']}: {task['title']} | {task['subject']} | "
             f"Frist: {deadline} | {task['estimated_minutes']} Min. | "
@@ -89,7 +89,3 @@ def show_tasks(tasks):
     print("\nErledigte Aufgaben:")
     print_task_list(done_tasks, "Keine erledigten Aufgaben.")
 
-
-if __name__ == "__main__":
-    show_tasks(SAMPLE_TASKS)
-    show_tasks([])

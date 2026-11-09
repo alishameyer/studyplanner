@@ -1,6 +1,4 @@
 import unittest
-from datetime import date
-
 from task_shortage import find_shortages, planned_minutes
 
 AVAILABILITY = [
@@ -21,21 +19,21 @@ class ShortageTest(unittest.TestCase):
         # 120 Min. bis Mittwoch (07.10.): nur Montag + Dienstag = 90 Min.
         tasks = [task(1, "2026-10-07", 120)]
         self.assertEqual(planned_minutes(tasks, AVAILABILITY), {1: 90})
-        shortages = find_shortages(tasks, AVAILABILITY, date(2026, 10, 1))
+        shortages = find_shortages(tasks, AVAILABILITY, "2026-10-01")
         self.assertEqual([(t["id"], m, o) for t, m, o in shortages], [(1, 30, False)])
 
     def test_fully_planned_task_has_no_warning(self):
         tasks = [task(1, "2026-10-08", 120)]
-        self.assertEqual(find_shortages(tasks, AVAILABILITY, date(2026, 10, 1)), [])
+        self.assertEqual(find_shortages(tasks, AVAILABILITY, "2026-10-01"), [])
 
     def test_overdue_open_task_is_flagged(self):
         tasks = [task(1, "2026-09-01", 30)]
-        shortages = find_shortages(tasks, AVAILABILITY, date(2026, 10, 1))
+        shortages = find_shortages(tasks, AVAILABILITY, "2026-10-01")
         self.assertTrue(shortages[0][2])
 
     def test_completed_tasks_are_ignored(self):
         tasks = [task(1, "2026-09-01", 30, completed=True)]
-        self.assertEqual(find_shortages(tasks, AVAILABILITY, date(2026, 10, 1)), [])
+        self.assertEqual(find_shortages(tasks, AVAILABILITY, "2026-10-01"), [])
 
 
 if __name__ == "__main__":

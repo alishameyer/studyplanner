@@ -15,15 +15,6 @@ SAMPLE_SUBJECTS = ["Grundlagen Programmieren", "Mathematik 1", "Statistik 1",
 
 
 def main():
-    # Kopien, damit die Beispieldaten selbst unverändert bleiben.
-    subjects = SAMPLE_SUBJECTS.copy()
-    tasks = []
-    for task in SAMPLE_TASKS:
-        tasks.append(task.copy())
-    availability = []
-    for entry in SAMPLE_AVAILABILITY:
-        availability.append(entry.copy())
-
     while True:
         print("\n=== Studyplanner ===")
         print("(4) Aufgaben anzeigen")
@@ -33,11 +24,11 @@ def main():
         choice = input("Auswahl: ").strip()
 
         if choice == "4":
-            show_tasks(tasks)
+            show_tasks(SAMPLE_TASKS)
         elif choice == "9":
-            show_tasks_by_subject(tasks, subjects)
+            show_tasks_by_subject(SAMPLE_TASKS, SAMPLE_SUBJECTS)
         elif choice == "10":
-            show_shortages(tasks, availability)
+            show_shortages(SAMPLE_TASKS, SAMPLE_AVAILABILITY)
         elif choice == "0":
             print("Auf Wiedersehen 👋")
             break
