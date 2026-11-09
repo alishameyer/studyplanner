@@ -340,7 +340,7 @@ werden verständlich gemeldet und nicht gespeichert.
 	    print("⚠️ Ungültige Auswahl.")
 	```
 
-- **Fachauswahl** (`task_overview.py`): Nur Zahlen im gültigen Bereich
+- **Fachauswahl** (`task_filter.py`): Nur Zahlen im gültigen Bereich
   werden akzeptiert:
 	```python
 	if not choice.isdigit() or not 1 <= int(choice) <= len(subjects):
@@ -393,7 +393,8 @@ gespeichert und beim Start wieder geladen (US11, US12).
 ```text
 studyplanner/
 ├── main.py                  # Hauptmenü (Konsolenanwendung)
-├── task_overview.py         # US04 Aufgaben anzeigen, US09 nach Fach filtern
+├── task_overview.py         # US04 Aufgaben anzeigen
+├── task_filter.py           # US09 Aufgaben nach Fach filtern
 ├── task_shortage.py         # US10 Zeitmangel erkennen
 ├── task_manager.py          # US02 Aufgabe erfassen, US03 bearbeiten
 ├── studyplanner_data.json   # Fächer, Aufgaben und Lernzeiten (Beispieldaten)

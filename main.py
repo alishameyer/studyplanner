@@ -6,7 +6,8 @@ Bis Speichern und Laden (US11, US12) bereitstehen, arbeitet das Programm
 mit den gemeinsamen Beispieldaten.
 """
 
-from task_overview import SAMPLE_TASKS, show_tasks, show_tasks_by_subject
+from task_filter import show_tasks_by_subject
+from task_overview import SAMPLE_TASKS, show_tasks
 from task_shortage import SAMPLE_AVAILABILITY, show_shortages
 
 SAMPLE_SUBJECTS = ["Grundlagen Programmieren", "Mathematik 1", "Statistik 1",

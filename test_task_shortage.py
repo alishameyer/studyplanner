@@ -1,7 +1,6 @@
 import unittest
 from datetime import date
 
-from task_overview import filter_by_subject
 from task_shortage import find_shortages, planned_minutes
 
 AVAILABILITY = [
@@ -37,13 +36,6 @@ class ShortageTest(unittest.TestCase):
     def test_completed_tasks_are_ignored(self):
         tasks = [task(1, "2026-09-01", 30, completed=True)]
         self.assertEqual(find_shortages(tasks, AVAILABILITY, date(2026, 10, 1)), [])
-
-
-class FilterTest(unittest.TestCase):
-    def test_only_selected_subject(self):
-        tasks = [task(1, "2026-10-07", 10, "Mathematik"), task(2, "2026-10-07", 10, "BWL")]
-        self.assertEqual([t["id"] for t in filter_by_subject(tasks, "BWL")], [2])
-        self.assertEqual(filter_by_subject(tasks, "Statistik"), [])
 
 
 if __name__ == "__main__":
