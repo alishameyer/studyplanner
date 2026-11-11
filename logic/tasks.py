@@ -42,6 +42,7 @@ def create_task(data, title, subject, deadline, minutes, priority):
         "subject": subject, 
         "deadline": deadline, 
         "estimated_minutes": minutes, 
+        "priority": priority, 
         "completed": False
 
     }
