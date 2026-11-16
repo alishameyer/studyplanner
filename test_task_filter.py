@@ -3,7 +3,7 @@ from contextlib import redirect_stdout
 from io import StringIO
 from unittest.mock import patch
 
-from SPX.task_filter_US09 import filter_by_subject, show_tasks_by_subject
+from task_filter import filter_by_subject, show_tasks_by_subject
 
 SUBJECTS = ["Mathematik", "BWL", "Statistik"]
 

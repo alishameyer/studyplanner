@@ -10,7 +10,7 @@ Das Modul liest und schreibt keine Dateien. Nach einer erfolgreichen
 
 from datetime import date
 
-from SPX.task_overview_US04 import PRIORITIES, format_task
+from task_overview import PRIORITIES, format_task
 
 DAYS_PER_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
@@ -254,7 +254,7 @@ def task_menu(tasks, subjects, save=None):
 
 
 if __name__ == "__main__":
-    from SPX.task_overview_US04 import SAMPLE_TASKS, show_tasks
+    from task_overview import SAMPLE_TASKS, show_tasks
 
     demo_subjects = ["Grundlagen Programmieren", "Mathematik 1",
                      "Statistik 1", "Principales of Management",
