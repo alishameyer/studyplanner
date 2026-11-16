@@ -1,8 +1,7 @@
 """US04 – Aufgaben anzeigen (Xhavid).
 
-Zeigt offene Aufgaben nach aufsteigender Frist und erledigte Aufgaben
-getrennt an. Das Modul führt keine Dateioperationen aus; die Aufgaben
-werden als Liste von Dictionaries übergeben (siehe README).
+Zeigt offene Aufgaben nach Frist sortiert und erledigte Aufgaben
+getrennt an. Eine Aufgabe ist ein Dictionary (siehe README).
 """
 
 from datetime import date
@@ -25,57 +24,68 @@ SAMPLE_TASKS = [
      "priority": 3, "completed": True},
 ]
 
-
 def format_date(iso_date):
-    """Wandelt 'YYYY-MM-DD' in '05.10.2026 (Montag)' um."""
-    day = date.fromisoformat(iso_date)
-    return f"{day.strftime('%d.%m.%Y')} ({WEEKDAYS[day.weekday()]})"
+    """Wandelt YYYY-MM-DD in DD.MM.YYYY (Wochentag) um."""
+    year = iso_date[0:4]
+    month = iso_date[5:7]
+    day = iso_date[8:10]
+    weekday = date(int(year), int(month), int(day)).weekday()
+    return f"{day}.{month}.{year} ({WEEKDAYS[weekday]})"
 
 
 def sort_by_deadline(tasks):
-    """Sortiert Aufgaben nach aufsteigender Frist, bei gleicher Frist nach ID."""
-    return sorted(tasks, key=lambda task: (task["deadline"], task["id"]))
+    """Sortiert Aufgaben nach Frist, bei gleicher Frist nach ID."""
+    # Tupel werden zuerst nach der Frist, dann nach der ID sortiert.
+    pairs = []
+    for task in tasks:
+        pairs.append((task["deadline"], task["id"], task))
+    pairs.sort()
+
+    sorted_tasks = []
+    for deadline, task_id, task in pairs:
+        sorted_tasks.append(task)
+    return sorted_tasks
 
 
 def split_tasks(tasks):
-    """Teilt Aufgaben in offene und erledigte, jeweils nach Frist sortiert."""
-    open_tasks = [task for task in tasks if not task["completed"]]
-    done_tasks = [task for task in tasks if task["completed"]]
+    """Teilt Aufgaben in offene und erledigte, beide nach Frist sortiert."""
+    open_tasks = []
+    done_tasks = []
+    for task in tasks:
+        if task["completed"]:
+            done_tasks.append(task)
+        else:
+            open_tasks.append(task)
     return sort_by_deadline(open_tasks), sort_by_deadline(done_tasks)
 
 
 def format_task(task):
     """Eine Zeile mit ID, Titel, Fach, Frist, Aufwand und Priorität."""
-    priority = PRIORITIES.get(task["priority"], str(task["priority"]))
+    priority = PRIORITIES[task["priority"]]
+    deadline = format_date(task["deadline"])
     return (f"ID {task['id']}: {task['title']} | {task['subject']} | "
-            f"Frist: {format_date(task['deadline'])} | "
-            f"{task['estimated_minutes']} Min. | Priorität: {priority}")
+            f"Frist: {deadline} | {task['estimated_minutes']} Min. | "
+            f"Priorität: {priority}")
+
+
+def print_task_list(tasks, empty_text):
+    """Gibt jede Aufgabe auf einer Zeile aus oder einen Hinweis."""
+    if len(tasks) == 0:
+        print("  " + empty_text)
+    for task in tasks:
+        print("  " + format_task(task))
 
 
 def show_tasks(tasks):
     """Gibt die Aufgabenübersicht in der Konsole aus."""
     print("\n--- Aufgabenübersicht ---")
-    if not tasks:
+    if len(tasks) == 0:
         print("Es sind noch keine Aufgaben erfasst.")
         return
 
     open_tasks, done_tasks = split_tasks(tasks)
-
     print("\nOffene Aufgaben (nach Frist):")
-    if open_tasks:
-        for task in open_tasks:
-            print("  " + format_task(task))
-    else:
-        print("  Keine offenen Aufgaben.")
-
+    print_task_list(open_tasks, "Keine offenen Aufgaben.")
     print("\nErledigte Aufgaben:")
-    if done_tasks:
-        for task in done_tasks:
-            print("  " + format_task(task))
-    else:
-        print("  Keine erledigten Aufgaben.")
+    print_task_list(done_tasks, "Keine erledigten Aufgaben.")
 
-
-if __name__ == "__main__":
-    show_tasks(SAMPLE_TASKS)
-    show_tasks([])
