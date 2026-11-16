@@ -2,7 +2,7 @@ import unittest
 from contextlib import redirect_stdout
 from io import StringIO
 
-from task_overview import format_date, show_tasks, split_tasks
+from SPX.task_overview_US04 import format_date, show_tasks, split_tasks
 
 SAMPLE_TASKS = [
     {"id": 1, "title": "Übungsblatt 3", "subject": "Mathematik",

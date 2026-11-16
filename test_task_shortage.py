@@ -1,5 +1,5 @@
 import unittest
-from task_shortage import find_shortages, planned_minutes
+from SPX.task_shortage_US10 import find_shortages, planned_minutes
 
 AVAILABILITY = [
     {"date": "2026-10-05", "available_minutes": 60},

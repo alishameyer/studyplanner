@@ -6,9 +6,9 @@ Bis Speichern und Laden (US11, US12) bereitstehen, arbeitet das Programm
 mit den gemeinsamen Beispieldaten.
 """
 
-from task_filter import show_tasks_by_subject
-from task_overview import SAMPLE_TASKS, show_tasks
-from task_shortage import SAMPLE_AVAILABILITY, show_shortages
+from SPX.task_filter_US09 import show_tasks_by_subject
+from SPX.task_overview_US04 import SAMPLE_TASKS, show_tasks
+from SPX.task_shortage_US10 import SAMPLE_AVAILABILITY, show_shortages
 
 SAMPLE_SUBJECTS = ["Grundlagen Programmieren", "Mathematik 1", "Statistik 1",
                    "Principales of Management", "Digital Business"]

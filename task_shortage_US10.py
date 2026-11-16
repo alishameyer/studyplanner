@@ -10,7 +10,7 @@ Lernzeiten: Liste mit Dictionaries
 
 from datetime import date
 
-from task_overview import format_date, split_tasks
+from SPX.task_overview_US04 import format_date, split_tasks
 
 SAMPLE_AVAILABILITY = [
     {"date": "2026-11-06", "available_minutes": 60},
