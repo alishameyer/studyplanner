@@ -94,3 +94,26 @@ def save_data(file_path, data):
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)
+def reject_duplicate_keys(pairs):
+    """
+    Verhindert, dass doppelte JSON-Schlüssel still überschrieben werden.
+    """
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"Doppelter JSON-Schlüssel: {key}")
+        result[key] = value
+    return result
+
+
+def load_data(file_path):
+    """
+    Nur eine fehlende Datei erlaubt leere Daten; sonst Fehler melden.
+    """
+    try:
+        with Path(file_path).open(encoding="utf-8") as stream:
+            data = json.load(stream, object_pairs_hook=reject_duplicate_keys)
+    except FileNotFoundError:
+        return empty_data()
+    validate_data(data)
+    return data
