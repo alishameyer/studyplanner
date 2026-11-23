@@ -11,21 +11,51 @@ def add_subject(data, name):
     data["subjects"].append(name)
     return name
 
-# US05 - Aufgabe erledigen
-
-
-def complete_task(data, task_id):
-
+# US03 - Aufgabe bearbeiten
+def edit_task(data, task_id, title, subject, deadline, minutes, priority):
+  
     task_id = positive_int(task_id, "ID")
 
     # Aufgabe anhand der ID suchen
     for task in data["tasks"]:
 
-        if task["id"] == task_id:
+        if task["id"] == task_id:  
 
+            # Neue Angaben prüfen
+            title = clean_text(title, "Titel")
+
+            if subject not in data["subjects"]:
+                raise ValueError("Dieses Fach existiert nicht.")
+
+            iso_day(deadline)
+            minutes = positive_int(minutes, "Aufwand")
+            priority = positive_int(priority, "Priorität", 3)
+
+            # Aufgabe bearbeiten
+            task["title"] = title
+            task["subject"] = subject
+            task["deadline"] = deadline
+            task["estimated_minutes"] = minutes
+            task["priority"] = priority
+
+            return task
+
+    # Wenn keine Aufgabe mit dieser ID gefunden wurde
+    raise ValueError("Diese Aufgaben-ID existiert nicht.")
+
+# US05 - Aufgabe erledigen 
+def complete_task(data, task_id):
+                     
+    task_id = positive_int(task_id, "ID")                
+     
+    # Aufgabe anhand der ID suchen 
+    for task in data["tasks"]: 
+         
+        if task["id"] == task_id: 
+                     
             # Prüfen, ob die Aufgabe bereits erledigt ist
             if task["completed"] == True:
-                raise ValueError("DIese Aufgabe ist bereits erledigt.")
+                raise ValueError("Diese Aufgabe ist bereits erledigt.")
 
             # Aufgabe als erledigt markieren
             task["completed"] = True
