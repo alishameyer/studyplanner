@@ -117,7 +117,7 @@ Als studierende Person möchte ich Aufgaben eines bestimmten Fachs anzeigen, dam
 
 #### Engpässe und Speicherung
 
-**US10 – Zeitmangel erkennenz: Xhavid**
+**US10 – Zeitmangel erkennen: Xhavid**
 
 Als studierende Person möchte ich Engpässe erkennen,
 damit ich bei fehlender Lernzeit rechtzeitig reagieren kann.
@@ -315,78 +315,76 @@ Each app must meet the following three criteria in order to be accepted (see als
 
 ### 1. Interactive App (Console Input)
 
-> 🚧 In this section, document how your project fulfills each criterion.  
----
-The application interacts with the user via the console. Users can:
-- View the pizza menu
-- Select pizzas and quantities
-- See the running total
-- Receive an invoice generated as a file
+Der Studyplanner wird über ein nummeriertes Hauptmenü in der Konsole bedient
+(siehe Tabelle "Bedienung"). Nach jeder Aktion erscheint das Menü erneut.
+Bereits in `main.py` eingebunden:
+
+- **(4) Aufgaben anzeigen:** offene Aufgaben nach Frist, erledigte getrennt (US04)
+- **(9) Aufgaben nach Fach filtern:** Fach aus nummerierter Liste wählen (US09)
+- **(10) Engpässe anzeigen:** fehlende Minuten und überfällige Aufgaben (US10)
+- **(0) Programm beenden**
+
+Die übrigen Optionen werden ergänzt, sobald die zugehörigen User Stories
+umgesetzt sind.
 
 ---
-
 
 ### 2. Data Validation
 
-The application validates all user input to ensure data integrity and a smooth user experience. This is implemented in `main-invoice.py` as follows:
+Eingaben werden geprüft, bevor sie übernommen werden. Ungültige Eingaben
+werden verständlich gemeldet und nicht gespeichert.
 
-- **Menu selection:** When the user enters a pizza number, the program checks if the input is a digit and within the valid menu range:
-	```python
-	if not choice.isdigit() or not (1 <= int(choice) <= len(menu)):
-			print("⚠️ Invalid choice.")
-			continue
-	```
-	This ensures only valid menu items can be ordered.
-
-- **Menu file validation:** When reading the menu file, the program checks for valid price values and skips invalid lines:
-	```python
-	try:
-			menu.append({"name": name, "size": size, "price": float(price)})
-	except ValueError:
-			print(f"⚠️ Skipping invalid line: {line.strip()}")
-	```
-
-- **Main menu options:** The main menu checks for valid options and handles invalid choices gracefully:
+- **Menüauswahl:** Unbekannte Optionen werden abgewiesen:
 	```python
 	else:
-			print("⚠️ Invalid choice.")
+	    print("⚠️ Ungültige Auswahl.")
 	```
 
-These checks prevent crashes and guide the user to provide correct input, matching the validation requirements described in the project guidelines.
+- **Fachauswahl** (`task_filter.py`): Nur Zahlen im gültigen Bereich
+  werden akzeptiert:
+	```python
+	try:
+	    choice = int(input("Auswahl: "))
+	except ValueError:
+	    choice = 0
+	if choice < 1 or choice > len(subjects):
+	    print(f"⚠️ Bitte eine Zahl von 1 bis {len(subjects)} wählen.")
+	```
+
+- **Aufgabenfelder** (`task_manager.py`): Titel nicht leer, Frist als Eingabe im Format
+  `DD-MM-YYYY` (gespeichert als `YYYY-MM-DD`) und nicht in der Vergangenheit, Aufwand als positive ganze
+  Minutenzahl, Priorität 1 bis 3:
+	```python
+	if not text.isdigit() or int(text) <= 0:
+	    raise ValueError("Der Aufwand muss eine positive ganze Minutenzahl sein.")
+	```
 
 ---
-
----
-
 
 ### 3. File Processing
 
-The application reads and writes data using files:
+Fächer, Aufgaben und Lernzeiten werden in `studyplanner_data.json`
+gespeichert und beim Start wieder geladen (US11, US12).
 
-- **Input file:** `menu.txt` — Contains the pizza menu, one item per line in the format `PizzaName;Size;Price`.
-	- Example:
+- **Datei:** `studyplanner_data.json` — Dictionary mit den Bereichen
+  `subjects`, `tasks` und `availability`.
+	- Beispiel:
+		```json
+		{
+		  "subjects": ["Mathematik 1", "Digital Business"],
+		  "tasks": [
+		    {"id": 1, "title": "Woche 1", "subject": "Mathematik 1",
+		     "deadline": "2026-10-14", "estimated_minutes": 90,
+		     "priority": 3, "completed": false}
+		  ],
+		  "availability": [
+		    {"date": "2026-11-06", "available_minutes": 60}
+		  ]
+		}
 		```
-		Margherita;Medium;12.50
-		Salami;Large;15.00
-		Funghi;Small;9.00
-		```
-	- The application reads this file at startup to display available pizzas.
-
-- **Output file:** `invoice_001.txt` (and similar) — Generated when an order is completed. Contains a summary of the order, including items, quantities, prices, discounts, and totals.
-	- Example:
-		```
-		Invoice #001
-		----------------------
-		1x Margherita (Medium)   12.50
-
-
-		2x Salami (Large)        30.00
-		----------------------
-		Total:                  42.50
-		Discount:                2.50
-		Amount Due:             40.00
-		```
-		- The output file serves as a record for both the user and the pizzeria, ensuring accuracy and transparency.
+- Die Datei im Repository enthält die gemeinsamen Beispieldaten.
+- Fehlt die Datei, startet das Programm mit leeren Daten; beschädigte
+  Dateien werden gemeldet und nicht überschrieben.
 
 ## ⚙️ Implementation
 
@@ -397,40 +395,47 @@ The application reads and writes data using files:
 
 ### 📂 Repository Structure
 ```text
-PizzaRP/
-├── main.py             # main program logic (console application)
-├── menu.txt            # pizza menu (input data file)
-├── invoice_001.txt     # example of a generated invoice (output file)
-├── docs/               # optional screenshots or project documentation
-└── README.md           # project description and milestones
+studyplanner/
+├── main.py                  # Hauptmenü (Konsolenanwendung)
+├── task_overview.py         # US04 Aufgaben anzeigen
+├── task_filter.py           # US09 Aufgaben nach Fach filtern
+├── task_shortage.py         # US10 Zeitmangel erkennen
+├── task_manager.py          # US02 Aufgabe erfassen, US03 bearbeiten
+├── studyplanner_data.json   # Fächer, Aufgaben und Lernzeiten (Beispieldaten)
+├── test_*.py                # Unit-Tests (unittest)
+└── README.md                # Projektbeschreibung
 ```
 
 ### How to Run
-> 🚧 Adjust if needed.
 1. Open the repository in **GitHub Codespaces**
 2. Open the **Terminal**
 3. Run:
 	```bash
 	python3 main.py
 	```
+4. Run the tests:
+	```bash
+	python3 -m unittest
+	```
 
 ### Libraries Used
 
-- `os`: Used for file and path operations, such as checking if the menu file exists and creating new files.
-- `glob`: Used to find all invoice files matching a pattern (e.g., `invoice_*.txt`) to determine the next invoice number.
+- `datetime`: Prüft Datumsangaben, vergleicht Fristen und berechnet den
+  Wochentag für die Anzeige (`05.10.2026 (Montag)`).
+- `json`: Speichert und lädt die Daten in `studyplanner_data.json`.
+- `unittest`: Automatische Tests der einzelnen Module.
 
-These libraries are part of the Python standard library, so no external installation is required. They were chosen for their simplicity and effectiveness in handling file management tasks in a console application.
+These libraries are part of the Python standard library, so no external installation is required.
 
 
 ## 👥 Team & Contributions
 
-> 🚧 Fill in the names of all team members and describe their individual contributions below. Each student should be responsible for at least one part of the project.
-
-| Name       | Contribution                                 |
-|------------|----------------------------------------------|
-| Student A  | Menu reading (file input) and displaying menu|
-| Student B  | Order logic and data validation              |
-| Student C  | Invoice generation (file output) and slides  |
+| Name     | Contribution |
+|----------|--------------|
+| Alisha   | US01, US07, US08: Fächer erfassen; Lernzeiten erfassen und anzeigen |
+| Laura    | US02, US03, US05: Aufgaben erfassen, bearbeiten und als erledigt markieren |
+| Xhavid   | US04, US09, US10: Aufgabenübersicht, Filter nach Fach, Engpasswarnungen |
+| Valentin | US06, US11, US12: Fortschrittsübersicht; Daten speichern und laden |
 
 
 ## 🤝 Contributing

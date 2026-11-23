@@ -13,13 +13,13 @@ def add_subject(data, name):
 
 # US03 - Aufgabe bearbeiten
 def edit_task(data, task_id, title, subject, deadline, minutes, priority):
-
+  
     task_id = positive_int(task_id, "ID")
 
     # Aufgabe anhand der ID suchen
     for task in data["tasks"]:
 
-        if task["id"] == task_id:
+        if task["id"] == task_id:  
 
             # Neue Angaben prüfen
             title = clean_text(title, "Titel")
@@ -41,4 +41,26 @@ def edit_task(data, task_id, title, subject, deadline, minutes, priority):
             return task
 
     # Wenn keine Aufgabe mit dieser ID gefunden wurde
+    raise ValueError("Diese Aufgaben-ID existiert nicht.")
+
+# US05 - Aufgabe erledigen 
+def complete_task(data, task_id):
+                     
+    task_id = positive_int(task_id, "ID")                
+     
+    # Aufgabe anhand der ID suchen 
+    for task in data["tasks"]: 
+         
+        if task["id"] == task_id: 
+                     
+            # Prüfen, ob die Aufgabe bereits erledigt ist
+            if task["completed"] == True:
+                raise ValueError("Diese Aufgabe ist bereits erledigt.")
+
+            # Aufgabe als erledigt markieren
+            task["completed"] = True
+
+            return task
+
+    # Wenn die ID nicht gefunden wurde
     raise ValueError("Diese Aufgaben-ID existiert nicht.")

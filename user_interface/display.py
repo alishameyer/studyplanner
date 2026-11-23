@@ -2,6 +2,7 @@
 
 from datetime import date
 from logic.availability import list_availability
+from logic.progress import calculate_progress
 
 WEEKDAYS = (
     "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag",
@@ -30,3 +31,12 @@ def show_availability(data):
         total += minutes
 
     print(f"Gesamt: {total} Min.")
+
+def show_progress(data):
+    """US06: US06: Aufgabenanzahl und Anteil erledigter Aufgaben ausgeben."""
+    result = calculate_progress(data)
+    print(
+        f"Gesamt: {result['total']} | Offen: {result['open']} | "
+        f"Erledigt: {result['completed']}\n"
+        f"Fortschritt: {result['percentage']:.1f} %"
+    )
