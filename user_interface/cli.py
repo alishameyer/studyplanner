@@ -6,8 +6,8 @@ from user_interface.display import (
 )
 from logic.capacity import calculate_shortfalls
 from logic.tasks import (
-    add_subject, add_task, complete_task, find_task,
-    update_task,
+    add_subject, create_task, complete_task, find_task,
+    edit_task,
 )
 
 MUTATING_CHOICES = {"1", "2", "3", "5", "7"}

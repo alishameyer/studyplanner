@@ -7,12 +7,12 @@ def set_availability(data, day, minutes):
 
     for entry in data["availability"]:
         if entry["date"] == day:
-            entry["availability_minutes"] = minutes
+            entry["available_minutes"] = minutes
             return
 
     data["availability"].append({
         "date": day,
-        "availability_minutes": minutes,
+        "available_minutes": minutes,
     })
 
 

@@ -7,7 +7,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from user_interface.cli import (
-    MENU, MUTATING_CHOICES, handle_changes, handle_view,
+    MENU, MUTATING_CHOICES, handle_change, handle_view,
 )
 
 from examples.sample_data import demo_data
